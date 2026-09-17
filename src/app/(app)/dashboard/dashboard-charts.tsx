@@ -110,14 +110,14 @@ export function DashboardCharts({ initialData }: { initialData: DashboardData })
       </div>
 
       {/* KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <KPICard label="Total Outstanding" value={formatRupiah(summary.totalOutstanding)} icon="💰" accent="var(--chart-4)" />
         <KPICard label="Jatuh Tempo" value={`${summary.overdueCount} invoice`} sub={summary.overdueTotal > 0 ? formatRupiah(summary.overdueTotal) : undefined} icon="⚠️" accent={summary.overdueCount > 0 ? 'var(--destructive)' : 'var(--chart-6)'} />
         <KPICard label="Total Ditagih" value={formatRupiah(summary.totalInvoiced)} sub={`${summary.invoiceCount} invoice`} icon="📄" accent="var(--chart-2)" />
         <KPICard label="Total Dibayar" value={formatRupiah(summary.totalPaid)} icon="✅" accent="var(--chart-5)" />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <KPICard label="Total Tabung Dikirim" value={String(summary.totalTabung)} icon="📦" accent="var(--chart-6)" />
         <KPICard label="Tabung 3kg" value={String(summary.tabung3kg)} icon="🔵" accent="var(--chart-2)" />
         <KPICard label="Tabung 5kg" value={String(summary.tabung5kg)} icon="🟡" accent="var(--chart-1)" />
