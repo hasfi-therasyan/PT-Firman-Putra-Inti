@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { sanitizeSearchTerm } from "@/lib/utils/postgrest";
 
 export interface PangkalanInput {
   nama: string;
@@ -48,23 +49,37 @@ export async function deletePangkalan(id: string) {
   revalidatePath("/pangkalan");
 }
 
-export async function getPangkalanList(search?: string, status?: string) {
+export async function getPangkalanList(filters?: {
+  search?: string;
+  status?: string;
+  page?: number;
+  limit?: number;
+}) {
   const supabase = await createClient();
+  const limit = filters?.limit || 20;
+  const page = filters?.page || 1;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
   let query = supabase
     .from("pangkalan")
-    .select("*")
-    .order("nama");
+    .select("*", { count: "exact" })
+    .order("nama")
+    .range(from, to);
 
-  if (search) {
-    query = query.or(`nama.ilike.%${search}%,kode.ilike.%${search}%`);
+  if (filters?.search) {
+    const term = sanitizeSearchTerm(filters.search);
+    if (term) {
+      query = query.or(`nama.ilike.%${term}%,kode.ilike.%${term}%`);
+    }
   }
-  if (status) {
-    query = query.eq("status", status);
+  if (filters?.status) {
+    query = query.eq("status", filters.status);
   }
 
-  const { data, error } = await query;
+  const { data, count, error } = await query;
   if (error) throw new Error(error.message);
-  return data;
+  return { data, count };
 }
 
 export async function getPangkalanById(id: string) {

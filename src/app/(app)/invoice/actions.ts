@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { generateInvoiceNumber, generateKodeUnik } from "@/lib/domain/invoice";
 import { calculateTotal } from "@/lib/domain/invoice";
+import { sanitizeSearchTerm } from "@/lib/utils/postgrest";
 
 export async function getProducts() {
   const supabase = await createClient();
@@ -154,19 +155,51 @@ export async function createInvoice(data: InvoiceInput) {
 export async function getInvoiceList(filters?: {
   status?: string;
   pangkalan_id?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
 }) {
   const supabase = await createClient();
+  const limit = filters?.limit || 20;
+  const page = filters?.page || 1;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
   let query = supabase
     .from("invoices")
-    .select("*, pangkalan:pangkalan_id(nama, kode)")
-    .order("created_at", { ascending: false });
+    .select("*, pangkalan:pangkalan_id(nama, kode)", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (filters?.status) query = query.eq("status", filters.status);
   if (filters?.pangkalan_id) query = query.eq("pangkalan_id", filters.pangkalan_id);
+  
+  if (filters?.search) {
+    const term = sanitizeSearchTerm(filters.search);
 
-  const { data, error } = await query;
+    if (term) {
+      // PostgREST logic trees cannot filter embedded resources, so resolve the
+      // matching pangkalan ids first and then OR them against the invoice number.
+      const { data: matchedPangkalan } = await supabase
+        .from("pangkalan")
+        .select("id")
+        .ilike("nama", `%${term}%`);
+
+      const ids = (matchedPangkalan || []).map((p) => p.id);
+
+      if (ids.length > 0) {
+        query = query.or(
+          `nomor_invoice.ilike.%${term}%,pangkalan_id.in.(${ids.join(",")})`
+        );
+      } else {
+        query = query.ilike("nomor_invoice", `%${term}%`);
+      }
+    }
+  }
+
+  const { data, count, error } = await query;
   if (error) throw new Error(error.message);
-  return data;
+  return { data, count };
 }
 
 export async function getInvoiceById(id: string) {

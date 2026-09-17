@@ -61,19 +61,32 @@ export async function updateJadwalStatus(
   revalidatePath(`/jadwal/${id}`);
 }
 
-export async function getJadwalList(dateFrom?: string, dateTo?: string) {
+export async function getJadwalList(filters?: {
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  page?: number;
+  limit?: number;
+}) {
   const supabase = await createClient();
+  const limit = filters?.limit || 20;
+  const page = filters?.page || 1;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
   let query = supabase
     .from("delivery_schedules")
-    .select("*, pangkalan:pangkalan_id(nama, kode)")
-    .order("tanggal_rencana", { ascending: false });
+    .select("*, pangkalan:pangkalan_id(nama, kode)", { count: "exact" })
+    .order("tanggal_rencana", { ascending: false })
+    .range(from, to);
 
-  if (dateFrom) query = query.gte("tanggal_rencana", dateFrom);
-  if (dateTo) query = query.lte("tanggal_rencana", dateTo);
+  if (filters?.status) query = query.eq("status", filters.status);
+  if (filters?.dateFrom) query = query.gte("tanggal_rencana", filters.dateFrom);
+  if (filters?.dateTo) query = query.lte("tanggal_rencana", filters.dateTo);
 
-  const { data, error } = await query;
+  const { data, count, error } = await query;
   if (error) throw new Error(error.message);
-  return data;
+  return { data, count };
 }
 
 export async function getJadwalById(id: string) {

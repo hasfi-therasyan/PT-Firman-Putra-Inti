@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getInvoiceList } from "./actions";
 import { formatRupiah } from "@/lib/utils/format";
 import { InvoiceFilterBar } from "./invoice-filter";
+import { PaginationControls } from "@/components/pagination-controls";
 
 export const metadata: Metadata = {
   title: "Invoice",
@@ -22,27 +23,30 @@ const STATUS_COLORS: Record<string, string> = {
 export default async function InvoicePage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; search?: string }>;
+  searchParams: Promise<{ status?: string; search?: string; page?: string }>;
 }) {
   const params = await searchParams;
-  let invoices: Awaited<ReturnType<typeof getInvoiceList>> = [];
+  const page = parseInt(params.page || "1", 10);
+  const limit = 20;
+
+  let invoices: Array<any> = [];
+  let totalCount = 0;
   let error: string | null = null;
+
   try {
-    invoices = await getInvoiceList({
+    const result = await getInvoiceList({
       status: params.status || undefined,
+      search: params.search || undefined,
+      page,
+      limit,
     });
-    // Search filter
-    if (params.search) {
-      const s = params.search.toLowerCase();
-      invoices = invoices.filter((inv: any) => {
-        const pangkalanNama = (inv.pangkalan as any)?.nama?.toLowerCase() || "";
-        const nomorInvoice = inv.nomor_invoice?.toLowerCase() || "";
-        return nomorInvoice.includes(s) || pangkalanNama.includes(s);
-      });
-    }
+    invoices = result.data || [];
+    totalCount = result.count || 0;
   } catch (e) {
     error = e instanceof Error ? e.message : "Gagal memuat data";
   }
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="space-y-6">
@@ -94,6 +98,13 @@ export default async function InvoicePage({
           );
         })}
       </div>
+
+      <PaginationControls
+        currentPage={page}
+        totalPages={totalPages}
+        baseUrl="/invoice"
+        params={{ status: params.status, search: params.search }}
+      />
     </div>
   );
 }

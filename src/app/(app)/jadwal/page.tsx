@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getJadwalList } from "./actions";
 import { JadwalFilterBar } from "./jadwal-filter";
+import { PaginationControls } from "@/components/pagination-controls";
 
 export const metadata: Metadata = {
   title: "Jadwal",
@@ -26,21 +27,31 @@ const STATUS_COLORS: Record<string, string> = {
 export default async function JadwalPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; dateFrom?: string; dateTo?: string }>;
+  searchParams: Promise<{ status?: string; dateFrom?: string; dateTo?: string; page?: string }>;
 }) {
   const params = await searchParams;
-  let jadwal: Awaited<ReturnType<typeof getJadwalList>> = [];
+  const page = parseInt(params.page || "1", 10);
+  const limit = 20;
+
+  let jadwal: Array<any> = [];
+  let totalCount = 0;
   let error: string | null = null;
 
   try {
-    jadwal = await getJadwalList(params.dateFrom, params.dateTo);
-    // Client-side status filter since getJadwalList doesn't have status filter
-    if (params.status) {
-      jadwal = jadwal.filter((j) => j.status === params.status);
-    }
+    const result = await getJadwalList({
+      status: params.status || undefined,
+      dateFrom: params.dateFrom || undefined,
+      dateTo: params.dateTo || undefined,
+      page,
+      limit,
+    });
+    jadwal = result.data || [];
+    totalCount = result.count || 0;
   } catch (e) {
     error = e instanceof Error ? e.message : "Gagal memuat data";
   }
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="space-y-6">
@@ -85,16 +96,6 @@ export default async function JadwalPage({
                 <p className="text-xs text-muted-foreground">
                   {j.tanggal_rencana} · {j.jumlah_tabung} tabung
                 </p>
-                {(j.tabung_3kg > 0 || j.tabung_5kg > 0 || j.tabung_12kg > 0) && (
-                  <div className="mt-1 flex flex-wrap gap-2 text-xs">
-                    {j.tabung_3kg > 0 && <span className="text-blue-600">3kg: {j.tabung_3kg}</span>}
-                    {j.tabung_5kg > 0 && <span className="text-amber-600">5kg: {j.tabung_5kg}</span>}
-                    {j.tabung_12kg > 0 && <span className="text-purple-600">12kg: {j.tabung_12kg}</span>}
-                  </div>
-                )}
-                {j.sopir && (
-                  <p className="text-xs text-muted-foreground">Sopir: {j.sopir}</p>
-                )}
               </div>
               <span
                 className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -107,6 +108,13 @@ export default async function JadwalPage({
           </Link>
         ))}
       </div>
+      
+      <PaginationControls
+        currentPage={page}
+        totalPages={totalPages}
+        baseUrl="/jadwal"
+        params={{ status: params.status, dateFrom: params.dateFrom, dateTo: params.dateTo }}
+      />
     </div>
   );
 }

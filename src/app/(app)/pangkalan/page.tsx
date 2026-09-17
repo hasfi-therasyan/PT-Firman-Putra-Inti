@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPangkalanList } from "./actions";
+import { PaginationControls } from "@/components/pagination-controls";
 
 export const metadata: Metadata = {
   title: "Pangkalan",
@@ -9,17 +10,30 @@ export const metadata: Metadata = {
 export default async function PangkalanPage({
   searchParams,
 }: {
-  searchParams: Promise<{ search?: string; status?: string }>;
+  searchParams: Promise<{ search?: string; status?: string; page?: string }>;
 }) {
   const params = await searchParams;
-  let pangkalan: Awaited<ReturnType<typeof getPangkalanList>> = [];
+  const page = parseInt(params.page || "1", 10);
+  const limit = 20;
+
+  let pangkalan: Array<any> = [];
+  let totalCount = 0;
   let error: string | null = null;
 
   try {
-    pangkalan = await getPangkalanList(params.search, params.status);
+    const result = await getPangkalanList({
+      search: params.search || undefined,
+      status: params.status || undefined,
+      page,
+      limit,
+    });
+    pangkalan = result.data || [];
+    totalCount = result.count || 0;
   } catch (e) {
     error = e instanceof Error ? e.message : "Gagal memuat data";
   }
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="space-y-6">
@@ -87,19 +101,16 @@ export default async function PangkalanPage({
                 {p.status === "aktif" ? "Aktif" : "Nonaktif"}
               </span>
             </div>
-            <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-              {p.pic_nama && <span>PIC: {p.pic_nama}</span>}
-            </div>
-            {(p.tabung_3kg > 0 || p.tabung_5kg > 0 || p.tabung_12kg > 0) && (
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
-                {p.tabung_3kg > 0 && <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 font-medium text-blue-700">3kg: {p.tabung_3kg}</span>}
-                {p.tabung_5kg > 0 && <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 font-medium text-amber-700">5kg: {p.tabung_5kg}</span>}
-                {p.tabung_12kg > 0 && <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 font-medium text-purple-700">12kg: {p.tabung_12kg}</span>}
-              </div>
-            )}
           </Link>
         ))}
       </div>
+      
+      <PaginationControls
+        currentPage={page}
+        totalPages={totalPages}
+        baseUrl="/pangkalan"
+        params={{ search: params.search, status: params.status }}
+      />
     </div>
   );
 }

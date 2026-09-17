@@ -56,7 +56,7 @@ export default async function JadwalDetailPage({ params }: { params: Promise<{ i
   const st = STATUS_MAP[schedule.status] || { label: schedule.status, cls: "bg-gray-100" };
 
   return (
-    <div className="space-y-6 max-w-lg">
+    <div className="space-y-6 max-w-lg mx-auto">
       <div>
         <Link href="/jadwal" className="text-xs text-muted-foreground hover:underline">&larr; Kembali</Link>
         <div className="mt-1 flex items-start justify-between">

@@ -4,6 +4,7 @@ import { formatRupiah } from "@/lib/utils/format";
 import { SyncButton } from "./sync-button";
 import { PembayaranFilterBar } from "./pembayaran-filter";
 import { DeletePaymentButton } from "./delete-payment-button";
+import { PaginationControls } from "@/components/pagination-controls";
 
 export const metadata: Metadata = {
   title: "Pembayaran",
@@ -12,29 +13,33 @@ export const metadata: Metadata = {
 export default async function PembayaranPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; arah?: string; dateFrom?: string; dateTo?: string }>;
+  searchParams: Promise<{ status?: string; arah?: string; dateFrom?: string; dateTo?: string; page?: string }>;
 }) {
   const params = await searchParams;
+  const page = parseInt(params.page || "1", 10);
+  const limit = 20;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
   const supabase = await createClient();
-  let { data: payments } = await supabase
+
+  let paymentQuery = supabase
     .from("payment_transactions")
-    .select("*, matches:payment_matches(nominal_dialokasikan, invoice:invoice_id(nomor_invoice))")
+    .select("*, matches:payment_matches(nominal_dialokasikan, invoice:invoice_id(nomor_invoice))", { count: "exact" })
     .neq("status", "ignored")
     .order("created_at", { ascending: false })
-    .limit(100);
+    .range(from, to);
 
-  if (params.status && payments) {
-    payments = payments.filter((p: any) => p.status === params.status);
-  }
-  if (params.arah && payments) {
-    payments = payments.filter((p: any) => p.arah === params.arah);
-  }
-  if (params.dateFrom && payments) {
-    payments = payments.filter((p: any) => p.created_at >= params.dateFrom! + "T00:00:00");
-  }
-  if (params.dateTo && payments) {
-    payments = payments.filter((p: any) => p.created_at <= params.dateTo! + "T23:59:59");
-  }
+  if (params.status) paymentQuery = paymentQuery.eq("status", params.status);
+  if (params.arah) paymentQuery = paymentQuery.eq("arah", params.arah);
+  if (params.dateFrom) paymentQuery = paymentQuery.gte("created_at", params.dateFrom + "T00:00:00");
+  if (params.dateTo) paymentQuery = paymentQuery.lte("created_at", params.dateTo + "T23:59:59");
+
+  const { data: payments, count: totalCount, error: queryError } = await paymentQuery;
+
+  const filteredPayments = payments || [];
+
+  const totalPages = Math.ceil((totalCount || 0) / limit);
 
   return (
     <div className="space-y-6">
@@ -51,7 +56,11 @@ export default async function PembayaranPage({
         currentDateTo={params.dateTo || ""}
       />
 
-      {!payments || payments.length === 0 ? (
+      {queryError && (
+        <p className="text-sm text-destructive">{queryError.message}</p>
+      )}
+
+      {!queryError && (!filteredPayments || filteredPayments.length === 0 ? (
         <div className="rounded-lg border bg-card p-8 text-center">
           <p className="text-muted-foreground">Belum ada transaksi pembayaran.</p>
           <p className="mt-2 text-xs text-muted-foreground">
@@ -60,7 +69,7 @@ export default async function PembayaranPage({
         </div>
       ) : (
         <div className="space-y-2">
-          {payments.map((p: any) => {
+          {filteredPayments.map((p: any) => {
             const matchInfo = p.matches?.[0];
             const invoiceNum = matchInfo?.invoice?.nomor_invoice;
             return (
@@ -95,7 +104,18 @@ export default async function PembayaranPage({
             );
           })}
         </div>
-      )}
+      ))}
+      <PaginationControls
+        currentPage={page}
+        totalPages={totalPages}
+        baseUrl="/pembayaran"
+        params={{
+          status: params.status,
+          arah: params.arah,
+          dateFrom: params.dateFrom,
+          dateTo: params.dateTo,
+        }}
+      />
     </div>
   );
 }
