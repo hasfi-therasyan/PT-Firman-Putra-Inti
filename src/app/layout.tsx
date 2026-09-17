@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { SplashScreen } from "@/components/splash-screen";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -21,6 +22,17 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "FPI-GMS",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icons/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icons/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/icons/apple-touch-icon.png", type: "image/png", sizes: "180x180" },
+    ],
+    shortcut: ["/favicon.ico"],
+  },
   other: {
     "mobile-web-app-capable": "yes",
   },
@@ -31,7 +43,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#1a1a1a",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#134376" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1119" },
+  ],
 };
 
 export default function RootLayout({
@@ -41,10 +56,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${jakarta.variable} h-full antialiased`}>
-      <head>
-        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
-      </head>
       <body className="min-h-dvh bg-background text-foreground font-sans">
+        <SplashScreen />
         {children}
       </body>
     </html>

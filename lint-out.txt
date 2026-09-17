@@ -1,0 +1,101 @@
+﻿
+> fpi-gms@0.1.0 lint
+> eslint
+
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\api\cron\gmail-ingest\route.ts
+  176:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\dashboard\actions.ts
+   37:56   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   42:17   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   43:28   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   44:56   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   45:52   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   51:51   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   54:52   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   55:50   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   56:50   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   57:51   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   73:37   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   73:54   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   81:37   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   81:106  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:33   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:122  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   88:41   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:42   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:60   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  108:34   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  108:64   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  115:41   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\dashboard\dashboard-charts.tsx
+   33:51   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   38:24   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   47:42   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  173:40   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:148  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  277:37   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\invoice\[id]\export-pdf.tsx
+  79:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\invoice\[id]\page.tsx
+   42:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   43:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   44:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   66:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   92:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  116:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  117:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\invoice\page.tsx
+  32:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  80:83  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\jadwal\[id]\page.tsx
+  55:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\jadwal\page.tsx
+  36:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  94:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\pangkalan\[id]\page.tsx
+   51:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   52:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  122:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  154:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\pangkalan\page.tsx
+  19:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\pembayaran\page.tsx
+  72:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\pengaturan\page.tsx
+  28:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  29:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\(app)\rekonsiliasi\page.tsx
+  33:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  64:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  87:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  92:85  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\api\cron\overdue-check\route.ts
+  34:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\app\api\cron\reconcile\route.ts
+  46:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  87:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  88:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\HASFI\Projects\FPI-GMS\src\components\install-pwa.tsx
+  5:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Γ£û 62 problems (0 errors, 62 warnings)
+

@@ -17,11 +17,11 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-700",
-  dijadwalkan: "bg-blue-100 text-blue-700",
-  dikirim: "bg-yellow-100 text-yellow-700",
-  selesai: "bg-green-100 text-green-700",
-  dibatalkan: "bg-red-100 text-red-700",
+  draft: "bg-muted text-muted-foreground",
+  dijadwalkan: "bg-info/10 text-info",
+  dikirim: "bg-warning/10 text-warning",
+  selesai: "bg-success/10 text-success",
+  dibatalkan: "bg-destructive/10 text-destructive",
 };
 
 export default async function JadwalPage({

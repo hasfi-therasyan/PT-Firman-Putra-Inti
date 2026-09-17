@@ -13,12 +13,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
-  draft: { label: "Draft", cls: "bg-gray-100 text-gray-700" },
-  issued: { label: "Diterbitkan", cls: "bg-blue-100 text-blue-700" },
-  partial: { label: "Sebagian", cls: "bg-yellow-100 text-yellow-700" },
-  paid: { label: "Lunas", cls: "bg-green-100 text-green-700" },
-  overdue: { label: "Jatuh Tempo", cls: "bg-red-100 text-red-700" },
-  cancelled: { label: "Dibatalkan", cls: "bg-gray-100 text-gray-500" },
+  draft: { label: "Draft", cls: "bg-muted text-muted-foreground" },
+  issued: { label: "Diterbitkan", cls: "bg-info/10 text-info" },
+  partial: { label: "Sebagian", cls: "bg-warning/10 text-warning" },
+  paid: { label: "Lunas", cls: "bg-success/10 text-success" },
+  overdue: { label: "Jatuh Tempo", cls: "bg-destructive/10 text-destructive" },
+  cancelled: { label: "Dibatalkan", cls: "bg-muted text-muted-foreground" },
 };
 
 export default async function InvoiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -44,7 +44,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
   const paid = matches?.reduce((sum: number, m: any) => sum + (m.nominal_dialokasikan || 0), 0) ?? 0;
   const sisa = invoice.total - paid;
   const progressPct = invoice.total > 0 ? Math.min(100, (paid / invoice.total) * 100) : 0;
-  const st = STATUS_MAP[invoice.status] || { label: invoice.status, cls: "bg-gray-100" };
+  const st = STATUS_MAP[invoice.status] || { label: invoice.status, cls: "bg-muted text-muted-foreground" };
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto px-2 sm:px-0">
@@ -74,9 +74,9 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
 
       <div className="rounded-lg border bg-card p-4 space-y-3">
         <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Total</span><span className="font-bold tabular-nums">{formatRupiah(invoice.total)}</span></div>
-        <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Dibayar</span><span className="font-bold tabular-nums text-green-600">{formatRupiah(paid)}</span></div>
-        <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Sisa</span><span className={`font-bold tabular-nums ${sisa > 0 ? "text-red-600" : ""}`}>{formatRupiah(sisa)}</span></div>
-        <div className="rounded-full bg-muted h-2"><div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${progressPct}%` }} /></div>
+        <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Dibayar</span><span className="font-bold tabular-nums text-success">{formatRupiah(paid)}</span></div>
+        <div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">Sisa</span><span className={`font-bold tabular-nums ${sisa > 0 ? "text-destructive" : ""}`}>{formatRupiah(sisa)}</span></div>
+        <div className="rounded-full bg-muted h-2"><div className="h-full rounded-full bg-success transition-all" style={{ width: `${progressPct}%` }} /></div>
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>Jatuh tempo: {invoice.tanggal_jatuh_tempo || "-"}</span>
           <span>Kode unik: {invoice.kode_unik > 0 ? invoice.kode_unik : "-"}</span>
@@ -121,7 +121,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
                     <p className="text-sm font-medium">{pay?.nama_pengirim || "Unknown"}</p>
                     <p className="text-xs text-muted-foreground">{pay?.tanggal_transaksi ? new Date(pay.tanggal_transaksi).toLocaleDateString("id-ID") : "-"} &middot; {m.metode === "auto_exact" ? "Tepat total" : m.metode === "auto_berita" ? "Dari remark" : m.metode === "auto_nama" ? "Cocok nama" : "Manual"}</p>
                   </div>
-                  <p className="text-sm font-semibold tabular-nums text-green-600">+{formatRupiah(m.nominal_dialokasikan)}</p>
+                  <p className="text-sm font-semibold tabular-nums text-success">+{formatRupiah(m.nominal_dialokasikan)}</p>
                 </div>
               );
             })}

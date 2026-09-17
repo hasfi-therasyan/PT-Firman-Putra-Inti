@@ -6,6 +6,24 @@ export const metadata: Metadata = {
   title: "Rekonsiliasi",
 };
 
+interface UnmatchedPayment {
+  id: string;
+  nama_pengirim?: string | null;
+  tanggal_transaksi?: string | null;
+  berita?: string | null;
+  nominal: number;
+  sumber?: string;
+}
+
+interface AttentionInvoice {
+  id: string;
+  nomor_invoice: string;
+  total: number;
+  total_dibayar?: number | null;
+  status: string;
+  pangkalan?: { nama: string } | null;
+}
+
 export default async function RekonsiliasiPage() {
   const supabase = await createClient();
 
@@ -30,8 +48,8 @@ export default async function RekonsiliasiPage() {
   const { data: monthInvoices } = await supabase.from("invoices").select("total").gte("tanggal_invoice", monthStart).not("status", "eq", "cancelled");
   const { data: monthPayments } = await supabase.from("payment_transactions").select("nominal").eq("arah", "masuk").eq("status_bank", "Success").gte("created_at", monthStart);
 
-  const totalInvoiced = (monthInvoices ?? []).reduce((s: number, i: any) => s + i.total, 0);
-  const totalReceived = (monthPayments ?? []).reduce((s: number, p: any) => s + p.nominal, 0);
+  const totalInvoiced = (monthInvoices ?? []).reduce((s: number, i: { total: number }) => s + i.total, 0);
+  const totalReceived = (monthPayments ?? []).reduce((s: number, p: { nominal: number }) => s + p.nominal, 0);
   const unresolvedCount = (unmatchedPayments?.length ?? 0) + (attentionInvoices?.length ?? 0);
 
   return (
@@ -46,23 +64,23 @@ export default async function RekonsiliasiPage() {
         </div>
         <div className="rounded-lg border bg-card p-3">
           <p className="text-xs text-muted-foreground">Diterima Bulan Ini</p>
-          <p className="text-lg font-bold tabular-nums text-green-600">{formatRupiah(totalReceived)}</p>
+          <p className="text-lg font-bold tabular-nums text-success">{formatRupiah(totalReceived)}</p>
         </div>
         <div className="rounded-lg border bg-card p-3">
           <p className="text-xs text-muted-foreground">Belum Selesai</p>
-          <p className={`text-lg font-bold tabular-nums ${unresolvedCount > 0 ? "text-orange-600" : ""}`}>{unresolvedCount} item</p>
+          <p className={`text-lg font-bold tabular-nums ${unresolvedCount > 0 ? "text-warning" : ""}`}>{unresolvedCount} item</p>
         </div>
       </div>
 
       {/* Unmatched payments */}
       <div className="space-y-3">
-        <h2 className="font-semibold text-orange-600">Pembayaran Belum Tercocok ({unmatchedPayments?.length ?? 0})</h2>
+        <h2 className="font-semibold text-warning">Pembayaran Belum Tercocok ({unmatchedPayments?.length ?? 0})</h2>
         {(!unmatchedPayments || unmatchedPayments.length === 0) ? (
           <div className="rounded-lg border bg-card p-4 text-center text-sm text-muted-foreground">Semua pembayaran sudah tercocok.</div>
         ) : (
           <div className="space-y-2">
-            {unmatchedPayments.map((p: any) => (
-              <div key={p.id} className="rounded-lg border border-orange-200 bg-orange-50 p-3">
+            {unmatchedPayments?.map((p: UnmatchedPayment) => (
+              <div key={p.id} className="rounded-lg border border-warning/30 bg-warning/10 p-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium">{p.nama_pengirim || "Unknown"}</p>
@@ -82,17 +100,17 @@ export default async function RekonsiliasiPage() {
       {/* Invoices needing attention */}
       {attentionInvoices && attentionInvoices.length > 0 && (
         <div className="space-y-3">
-          <h2 className="font-semibold text-red-600">Invoice Perlu Perhatian ({attentionInvoices.length})</h2>
+          <h2 className="font-semibold text-destructive">Invoice Perlu Perhatian ({attentionInvoices.length})</h2>
           <div className="space-y-2">
-            {attentionInvoices.map((inv: any) => (
+            {attentionInvoices?.map((inv: AttentionInvoice) => (
               <div key={inv.id} className="rounded-lg border bg-card p-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium">{inv.nomor_invoice}</p>
-                    <p className="text-xs text-muted-foreground">{(inv.pangkalan as any)?.nama}</p>
+                    <p className="text-xs text-muted-foreground">{inv.pangkalan?.nama}</p>
                   </div>
                   <div className="text-right">
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${inv.status === "overdue" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${inv.status === "overdue" ? "bg-destructive/10 text-destructive" : "bg-warning/10 text-warning"}`}>
                       {inv.status === "overdue" ? "Jatuh Tempo" : "Sebagian"}
                     </span>
                     <p className="mt-1 text-sm font-semibold tabular-nums">{formatRupiah(inv.total - (inv.total_dibayar || 0))}</p>

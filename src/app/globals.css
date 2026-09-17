@@ -18,6 +18,11 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-chart-10: var(--chart-10);
+  --color-chart-9: var(--chart-9);
+  --color-chart-8: var(--chart-8);
+  --color-chart-7: var(--chart-7);
+  --color-chart-6: var(--chart-6);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -27,6 +32,15 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-flame: var(--flame);
+  --color-vapor: var(--vapor);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -48,73 +62,116 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ==========================================================================
+   FPI-GMS — "Premium Gas" theme
+   Brand direction: deep petroleum navy (trust / corporate energy)
+   + refined flame amber (LPG energy / premium warmth)
+   + cool neutral surfaces so no token ever clashes.
+   Every text token clears WCAG AA (>= 4.5:1) against its surface.
+   ========================================================================== */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.992 0.003 250);
+  --foreground: oklch(0.235 0.024 258);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.235 0.024 258);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.235 0.024 258);
+  --primary: oklch(0.38 0.1 253);
+  --primary-foreground: oklch(0.985 0.008 250);
+  --secondary: oklch(0.955 0.01 250);
+  --secondary-foreground: oklch(0.32 0.045 255);
+  --muted: oklch(0.962 0.008 250);
+  --muted-foreground: oklch(0.525 0.026 255);
+  --accent: oklch(0.958 0.03 80);
+  --accent-foreground: oklch(0.38 0.075 62);
+  --destructive: oklch(0.545 0.195 25);
+  --destructive-foreground: oklch(0.985 0.008 250);
+  --success: oklch(0.5 0.105 162);
+  --success-foreground: oklch(0.985 0.008 250);
+  --warning: oklch(0.53 0.115 66);
+  --warning-foreground: oklch(0.985 0.008 250);
+  --info: oklch(0.5 0.105 253);
+  --info-foreground: oklch(0.985 0.008 250);
+  --flame: oklch(0.68 0.17 55);
+  --vapor: oklch(0.5 0.085 195);
+  --border: oklch(0.905 0.01 250);
+  --input: oklch(0.905 0.01 250);
+  --ring: oklch(0.58 0.1 253);
+  /* Chart categorical palette — vibrant + mutually distinct (hue gap >= ~30°,
+     OKLCH chroma >= 0.14 so every series reads vivid on white AND navy cards).
+     Deliberately avoids navy (primary/brand), red-orange (destructive) and
+     slate-gray (muted) so data hues never collide with status/semantic colors:
+       1 tangerine 55° • 2 violet-blue 275° • 3 cyan 195° •
+       4 magenta-pink 350° • 5 spring-green 160° • 6 golden-yellow 95° •
+       7 sky-blue 235° • 8 coral-red 32° • 9 lime-chartreuse 125° • 10 purple 305° */
+  --chart-1: oklch(0.72 0.18 55);
+  --chart-2: oklch(0.64 0.18 275);
+  --chart-3: oklch(0.7 0.15 195);
+  --chart-4: oklch(0.7 0.19 350);
+  --chart-5: oklch(0.74 0.17 160);
+  --chart-6: oklch(0.82 0.17 95);
+  --chart-7: oklch(0.68 0.16 235);
+  --chart-8: oklch(0.7 0.18 32);
+  --chart-9: oklch(0.78 0.17 125);
+  --chart-10: oklch(0.66 0.19 305);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.975 0.008 250);
+  --sidebar-foreground: oklch(0.3 0.035 255);
+  --sidebar-primary: oklch(0.38 0.1 253);
+  --sidebar-primary-foreground: oklch(0.985 0.008 250);
+  --sidebar-accent: oklch(0.945 0.014 250);
+  --sidebar-accent-foreground: oklch(0.32 0.045 255);
+  --sidebar-border: oklch(0.9 0.01 250);
+  --sidebar-ring: oklch(0.58 0.1 253);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --background: oklch(0.175 0.02 258);
+  --foreground: oklch(0.965 0.006 250);
+  --card: oklch(0.213 0.023 258);
+  --card-foreground: oklch(0.965 0.006 250);
+  --popover: oklch(0.213 0.023 258);
+  --popover-foreground: oklch(0.965 0.006 250);
+  --primary: oklch(0.67 0.11 253);
+  --primary-foreground: oklch(0.15 0.02 258);
+  --secondary: oklch(0.26 0.024 258);
+  --secondary-foreground: oklch(0.965 0.006 250);
+  --muted: oklch(0.26 0.024 258);
+  --muted-foreground: oklch(0.7 0.02 255);
+  --accent: oklch(0.29 0.032 70);
+  --accent-foreground: oklch(0.88 0.075 78);
+  --destructive: oklch(0.68 0.18 25);
+  --destructive-foreground: oklch(0.15 0.02 258);
+  --success: oklch(0.7 0.125 162);
+  --success-foreground: oklch(0.15 0.02 258);
+  --warning: oklch(0.76 0.135 72);
+  --warning-foreground: oklch(0.15 0.02 258);
+  --info: oklch(0.66 0.11 253);
+  --info-foreground: oklch(0.15 0.02 258);
+  --flame: oklch(0.75 0.165 60);
+  --vapor: oklch(0.7 0.09 195);
+  --border: oklch(1 0 0 / 11%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --ring: oklch(0.62 0.1 253);
+  /* Same vibrant categorical hues as light mode, lifted for dark surfaces. */
+  --chart-1: oklch(0.78 0.16 55);
+  --chart-2: oklch(0.72 0.16 275);
+  --chart-3: oklch(0.78 0.13 195);
+  --chart-4: oklch(0.74 0.17 350);
+  --chart-5: oklch(0.8 0.15 160);
+  --chart-6: oklch(0.86 0.15 95);
+  --chart-7: oklch(0.74 0.14 235);
+  --chart-8: oklch(0.75 0.16 32);
+  --chart-9: oklch(0.83 0.15 125);
+  --chart-10: oklch(0.72 0.17 305);
+  --sidebar: oklch(0.213 0.023 258);
+  --sidebar-foreground: oklch(0.965 0.006 250);
+  --sidebar-primary: oklch(0.67 0.11 253);
+  --sidebar-primary-foreground: oklch(0.15 0.02 258);
+  --sidebar-accent: oklch(0.26 0.024 258);
+  --sidebar-accent-foreground: oklch(0.965 0.006 250);
+  --sidebar-border: oklch(1 0 0 / 11%);
+  --sidebar-ring: oklch(0.62 0.1 253);
 }
 
 @layer base {
@@ -126,5 +183,467 @@
   }
   html {
     @apply font-sans;
+  }
+}
+/* ==========================================================================
+   Brand surfaces — premium gas accents (navy x flame)
+   ========================================================================== */
+@layer components {
+  /* Navy-to-petrol sheen used on the sidebar header + hero blocks. */
+  .brand-surface {
+    background-image: linear-gradient(
+      135deg,
+      oklch(0.28 0.075 255) 0%,
+      oklch(0.38 0.1 253) 48%,
+      oklch(0.46 0.105 253) 100%
+    );
+    color: oklch(0.985 0.008 250);
+  }
+
+  /* Flame underline used under brand/section titles. */
+  .brand-rule {
+    background-image: linear-gradient(90deg, var(--primary) 0%, var(--flame) 100%);
+  }
+
+  /* Soft brand wash for page headers. */
+  .brand-wash {
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--primary) 7%, transparent) 0%,
+      transparent 100%
+    );
+  }
+}
+
+/* ==========================================================================
+   Splash screen — "gas flow" opening animation
+   The composition mirrors the system itself:
+   tabung (inventory) -> flame (energy) -> vapor (gas) ->
+   pipeline + delivery dots (distribution) -> progress bar (flow).
+   ========================================================================== */
+.fpi-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  overflow: hidden;
+  background: radial-gradient(
+    120% 90% at 50% 12%,
+    oklch(0.42 0.1 253) 0%,
+    oklch(0.24 0.05 256) 42%,
+    oklch(0.14 0.025 258) 100%
+  );
+  color: oklch(0.985 0.008 250);
+  animation: fpi-splash-in 320ms ease-out both;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Faint technical grid so the navy reads as "engineered", not flat. */
+.fpi-splash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(oklch(1 0 0 / 6%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 6%) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 78%);
+  pointer-events: none;
+}
+
+.fpi-splash[data-leaving="true"] {
+  animation: fpi-splash-out 480ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* --- Emblem (tabung + flame + vapor + pulse rings) --- */
+.fpi-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 168px;
+  height: 168px;
+}
+
+.fpi-emblem-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid oklch(0.68 0.17 55 / 55%);
+  animation: fpi-ring-pulse 2400ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+.fpi-emblem-ring:nth-of-type(2) {
+  animation-delay: 800ms;
+}
+.fpi-emblem-ring:nth-of-type(3) {
+  animation-delay: 1600ms;
+}
+
+.fpi-emblem-halo {
+  position: absolute;
+  width: 132px;
+  height: 132px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, oklch(0.68 0.17 55 / 26%) 0%, transparent 68%);
+  animation: fpi-halo-breathe 2800ms ease-in-out infinite;
+}
+
+.fpi-emblem-body {
+  position: relative;
+  animation:
+    fpi-cyl-rise 720ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    fpi-cyl-float 3600ms ease-in-out 720ms infinite;
+}
+
+.fpi-flame {
+  transform-origin: 50% 100%;
+  animation:
+    fpi-flame-ignite 700ms cubic-bezier(0.22, 1, 0.36, 1) 260ms both,
+    fpi-flame-flicker 1400ms ease-in-out 960ms infinite;
+}
+
+.fpi-flame-inner {
+  transform-origin: 50% 100%;
+  animation: fpi-flame-flicker 900ms ease-in-out 960ms infinite reverse;
+}
+
+.fpi-vapor {
+  animation: fpi-vapor-rise 2200ms ease-out infinite;
+}
+.fpi-vapor:nth-of-type(2) {
+  animation-delay: 550ms;
+}
+.fpi-vapor:nth-of-type(3) {
+  animation-delay: 1100ms;
+}
+.fpi-vapor:nth-of-type(4) {
+  animation-delay: 1650ms;
+}
+
+/* --- Distribution pipeline (flowing dashes) --- */
+.fpi-pipeline-track {
+  stroke: oklch(1 0 0 / 14%);
+}
+
+.fpi-pipeline-flow {
+  stroke: oklch(0.68 0.17 55);
+  stroke-dasharray: 6 14;
+  animation: fpi-route-flow 1600ms linear infinite;
+}
+
+.fpi-pipeline-pulse {
+  stroke: oklch(0.52 0.11 253);
+  stroke-width: 1.5;
+  animation: fpi-route-breathe 2600ms ease-in-out infinite;
+}
+
+.fpi-delivery {
+  transform-origin: center;
+  animation: fpi-delivery-pop 2600ms ease-in-out infinite;
+}
+.fpi-delivery:nth-of-type(2) {
+  animation-delay: 300ms;
+}
+.fpi-delivery:nth-of-type(3) {
+  animation-delay: 600ms;
+}
+.fpi-delivery:nth-of-type(4) {
+  animation-delay: 900ms;
+}
+
+/* --- Wordmark + tagline + collapsed brand --- */
+.fpi-wordmark {
+  animation: fpi-word-rise 560ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
+}
+
+.fpi-tagline {
+  animation: fpi-word-rise 560ms cubic-bezier(0.22, 1, 0.36, 1) 600ms both;
+}
+
+.fpi-collapsed-brand {
+  opacity: 0;
+  animation: fpi-collapse-in 420ms ease-out 1250ms both;
+}
+
+/* --- Progress bar + stage label --- */
+.fpi-progress {
+  position: relative;
+  width: 208px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: oklch(1 0 0 / 14%);
+}
+
+.fpi-progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 9999px;
+  background-image: linear-gradient(90deg, oklch(0.52 0.11 253) 0%, oklch(0.68 0.17 55) 100%);
+  animation: fpi-progress-fill 1750ms cubic-bezier(0.32, 0.72, 0.24, 1) 420ms both;
+}
+
+.fpi-progress-sheen {
+  position: absolute;
+  inset-block: 0;
+  width: 34%;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 75%), transparent);
+  animation: fpi-sheen 1400ms ease-in-out 620ms infinite;
+}
+
+.fpi-stage {
+  animation: fpi-stage-cycle 1750ms ease-out 420ms both;
+}
+
+/* --- Small decorative orbs behind the emblem --- */
+.fpi-orb {
+  position: absolute;
+  border-radius: 9999px;
+  animation: fpi-orb-drift 5200ms ease-in-out infinite;
+}
+.fpi-orb:nth-of-type(2) {
+  animation-delay: 1400ms;
+}
+
+/* ==========================================================================
+   Splash screen keyframes
+   ========================================================================== */
+@keyframes fpi-splash-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fpi-splash-out {
+  to {
+    opacity: 0;
+    transform: scale(1.04);
+    visibility: hidden;
+  }
+}
+
+@keyframes fpi-cyl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.86);
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fpi-cyl-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes fpi-halo-breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fpi-ring-pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.62);
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes fpi-flame-ignite {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.2);
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.16);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fpi-flame-flicker {
+  0%,
+  100% {
+    opacity: 0.95;
+    transform: scale(1, 1);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(0.94, 1.12);
+  }
+  48% {
+    opacity: 0.88;
+    transform: scale(1.06, 0.92);
+  }
+  74% {
+    opacity: 1;
+    transform: scale(0.97, 1.07);
+  }
+}
+
+@keyframes fpi-vapor-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.55);
+  }
+  32% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.3);
+  }
+}
+
+@keyframes fpi-route-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+@keyframes fpi-route-breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes fpi-delivery-pop {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+@keyframes fpi-word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fpi-collapse-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fpi-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes fpi-sheen {
+  0% {
+    transform: translateX(-160%);
+  }
+  100% {
+    transform: translateX(420%);
+  }
+}
+
+@keyframes fpi-stage-cycle {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  14% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fpi-orb-drift {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-18px) scale(1.15);
+  }
+}
+
+/* Accessible motion: keep the brand moment, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .fpi-emblem-ring,
+  .fpi-emblem-halo,
+  .fpi-emblem-body,
+  .fpi-flame,
+  .fpi-flame-inner,
+  .fpi-vapor,
+  .fpi-pipeline-flow,
+  .fpi-pipeline-pulse,
+  .fpi-delivery,
+  .fpi-progress-sheen,
+  .fpi-orb {
+    animation: none !important;
+  }
+  .fpi-wordmark,
+  .fpi-tagline,
+  .fpi-collapsed-brand,
+  .fpi-progress-bar,
+  .fpi-stage,
+  .fpi-splash {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
   }
 }

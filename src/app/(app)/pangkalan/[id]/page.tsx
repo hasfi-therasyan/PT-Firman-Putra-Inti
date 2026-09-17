@@ -12,20 +12,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
-  draft: { label: "Draft", cls: "bg-gray-100 text-gray-700" },
-  dijadwalkan: { label: "Dijadwalkan", cls: "bg-blue-100 text-blue-700" },
-  dikirim: { label: "Dikirim", cls: "bg-yellow-100 text-yellow-700" },
-  selesai: { label: "Selesai", cls: "bg-green-100 text-green-700" },
-  dibatalkan: { label: "Dibatalkan", cls: "bg-gray-100 text-gray-500" },
-  issued: { label: "Diterbitkan", cls: "bg-blue-100 text-blue-700" },
-  partial: { label: "Sebagian", cls: "bg-yellow-100 text-yellow-700" },
-  paid: { label: "Lunas", cls: "bg-green-100 text-green-700" },
-  overdue: { label: "Jatuh Tempo", cls: "bg-red-100 text-red-700" },
-  cancelled: { label: "Dibatalkan", cls: "bg-gray-100 text-gray-500" },
+  draft: { label: "Draft", cls: "bg-muted text-muted-foreground" },
+  dijadwalkan: { label: "Dijadwalkan", cls: "bg-info/10 text-info" },
+  dikirim: { label: "Dikirim", cls: "bg-warning/10 text-warning" },
+  selesai: { label: "Selesai", cls: "bg-success/10 text-success" },
+  dibatalkan: { label: "Dibatalkan", cls: "bg-muted text-muted-foreground" },
+  issued: { label: "Diterbitkan", cls: "bg-info/10 text-info" },
+  partial: { label: "Sebagian", cls: "bg-warning/10 text-warning" },
+  paid: { label: "Lunas", cls: "bg-success/10 text-success" },
+  overdue: { label: "Jatuh Tempo", cls: "bg-destructive/10 text-destructive" },
+  cancelled: { label: "Dibatalkan", cls: "bg-muted text-muted-foreground" },
 };
 
 function StatusBadge({ status }: { status: string }) {
-  const s = STATUS_MAP[status] || { label: status, cls: "bg-gray-100 text-gray-700" };
+  const s = STATUS_MAP[status] || { label: status, cls: "bg-muted text-muted-foreground" };
   return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${s.cls}`}>{s.label}</span>;
 }
 
@@ -63,7 +63,7 @@ export default async function PangkalanDetailPage({ params }: { params: Promise<
           <h1 className="mt-1 text-2xl font-bold">{pangkalan.nama}</h1>
           <p className="text-sm text-muted-foreground">{pangkalan.kode} &middot; {pangkalan.kota || pangkalan.kecamatan || ""}</p>
         </div>
-        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${pangkalan.status === "aktif" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}>
+        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${pangkalan.status === "aktif" ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
           {pangkalan.status === "aktif" ? "Aktif" : "Nonaktif"}
         </span>
       </div>
@@ -75,11 +75,11 @@ export default async function PangkalanDetailPage({ params }: { params: Promise<
         </div>
         <div className="rounded-lg border bg-card p-3">
           <p className="text-xs text-muted-foreground">Total Dibayar</p>
-          <p className="text-lg font-bold tabular-nums text-green-600">{formatRupiah(totalDibayar)}</p>
+          <p className="text-lg font-bold tabular-nums text-success">{formatRupiah(totalDibayar)}</p>
         </div>
         <div className="rounded-lg border bg-card p-3">
           <p className="text-xs text-muted-foreground">Sisa</p>
-          <p className={`text-lg font-bold tabular-nums ${sisa > 0 ? "text-red-600" : ""}`}>{formatRupiah(sisa)}</p>
+          <p className={`text-lg font-bold tabular-nums ${sisa > 0 ? "text-destructive" : ""}`}>{formatRupiah(sisa)}</p>
         </div>
       </div>
 
@@ -97,17 +97,17 @@ export default async function PangkalanDetailPage({ params }: { params: Promise<
         <div className="rounded-lg border bg-card p-4">
           <p className="text-xs text-muted-foreground mb-2">Jumlah Tabung LPG</p>
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-lg bg-blue-50 p-3">
-              <p className="text-2xl font-bold text-blue-700">{pangkalan.tabung_3kg || 0}</p>
-              <p className="text-xs text-blue-600">3kg</p>
+            <div className="rounded-lg bg-info/10 p-3">
+              <p className="text-2xl font-bold text-info">{pangkalan.tabung_3kg || 0}</p>
+              <p className="text-xs text-info">3kg</p>
             </div>
-            <div className="rounded-lg bg-amber-50 p-3">
-              <p className="text-2xl font-bold text-amber-700">{pangkalan.tabung_5kg || 0}</p>
-              <p className="text-xs text-amber-600">5kg</p>
+            <div className="rounded-lg bg-warning/10 p-3">
+              <p className="text-2xl font-bold text-warning">{pangkalan.tabung_5kg || 0}</p>
+              <p className="text-xs text-warning">5kg</p>
             </div>
-            <div className="rounded-lg bg-purple-50 p-3">
-              <p className="text-2xl font-bold text-purple-700">{pangkalan.tabung_12kg || 0}</p>
-              <p className="text-xs text-purple-600">12kg</p>
+            <div className="rounded-lg bg-vapor/10 p-3">
+              <p className="text-2xl font-bold text-vapor">{pangkalan.tabung_12kg || 0}</p>
+              <p className="text-xs text-vapor">12kg</p>
             </div>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default async function PangkalanDetailPage({ params }: { params: Promise<
                 {inv.total_dibayar > 0 && (
                   <div className="mt-2 flex items-center gap-2 text-xs">
                     <div className="flex-1 rounded-full bg-muted h-1.5">
-                      <div className="h-full rounded-full bg-green-500" style={{ width: `${Math.min(100, (inv.total_dibayar / inv.total) * 100)}%` }} />
+                      <div className="h-full rounded-full bg-success" style={{ width: `${Math.min(100, (inv.total_dibayar / inv.total) * 100)}%` }} />
                     </div>
                     <span className="text-muted-foreground">{formatRupiah(inv.total_dibayar)} / {formatRupiah(inv.total)}</span>
                   </div>
@@ -158,9 +158,9 @@ export default async function PangkalanDetailPage({ params }: { params: Promise<
                   <p className="text-xs text-muted-foreground">{s.sopir || "-"} &middot; {s.nomor_kendaraan || "-"}</p>
                   {(s.tabung_3kg > 0 || s.tabung_5kg > 0 || s.tabung_12kg > 0) && (
                     <div className="mt-1 flex flex-wrap gap-2 text-xs">
-                      {s.tabung_3kg > 0 && <span className="text-blue-600">3kg: {s.tabung_3kg}</span>}
-                      {s.tabung_5kg > 0 && <span className="text-amber-600">5kg: {s.tabung_5kg}</span>}
-                      {s.tabung_12kg > 0 && <span className="text-purple-600">12kg: {s.tabung_12kg}</span>}
+                      {s.tabung_3kg > 0 && <span className="text-info">3kg: {s.tabung_3kg}</span>}
+                      {s.tabung_5kg > 0 && <span className="text-warning">5kg: {s.tabung_5kg}</span>}
+                      {s.tabung_12kg > 0 && <span className="text-vapor">12kg: {s.tabung_12kg}</span>}
                     </div>
                   )}
                 </div>

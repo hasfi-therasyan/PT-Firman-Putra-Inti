@@ -10,6 +10,21 @@ export const metadata: Metadata = {
   title: "Pembayaran",
 };
 
+interface PaymentRow {
+  id: string;
+  nominal: number;
+  status: string;
+  arah: string;
+  nama_pengirim?: string | null;
+  tanggal_transaksi?: string | null;
+  berita?: string | null;
+  sumber?: string;
+  matches?: Array<{
+    nominal_dialokasikan: number;
+    invoice?: { nomor_invoice: string } | null;
+  }> | null;
+}
+
 export default async function PembayaranPage({
   searchParams,
 }: {
@@ -37,7 +52,7 @@ export default async function PembayaranPage({
 
   const { data: payments, count: totalCount, error: queryError } = await paymentQuery;
 
-  const filteredPayments = payments || [];
+  const filteredPayments: PaymentRow[] = (payments as PaymentRow[]) || [];
 
   const totalPages = Math.ceil((totalCount || 0) / limit);
 
@@ -69,7 +84,7 @@ export default async function PembayaranPage({
         </div>
       ) : (
         <div className="space-y-2">
-          {filteredPayments.map((p: any) => {
+          {filteredPayments.map((p: PaymentRow) => {
             const matchInfo = p.matches?.[0];
             const invoiceNum = matchInfo?.invoice?.nomor_invoice;
             return (
@@ -85,9 +100,9 @@ export default async function PembayaranPage({
                     <div className="text-right">
                       <p className="text-sm font-semibold tabular-nums">{formatRupiah(p.nominal)}</p>
                       <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                        p.status === "matched" ? "bg-green-100 text-green-700" :
-                        p.status === "unmatched" ? "bg-yellow-100 text-yellow-700" :
-                        "bg-gray-100 text-gray-700"
+                        p.status === "matched" ? "bg-success/10 text-success" :
+                        p.status === "unmatched" ? "bg-warning/10 text-warning" :
+                        "bg-muted text-muted-foreground"
                       }`}>
                         {p.status === "matched" ? "Tercocok" : p.status === "unmatched" ? "Belum cocok" : p.status}
                       </span>

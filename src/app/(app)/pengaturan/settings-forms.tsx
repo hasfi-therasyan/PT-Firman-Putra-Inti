@@ -117,7 +117,7 @@ function CompanyProfileSection({
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
           {saved && (
-            <span className="text-sm text-green-600">Tersimpan</span>
+            <span className="text-sm text-success">Tersimpan</span>
           )}
         </div>
       </form>
@@ -187,7 +187,7 @@ function InvoiceSettingsSection({
           <button type="submit" disabled={loading} className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-6 text-sm font-medium text-primary-foreground hover:bg-primary/80 disabled:opacity-50">
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
-          {saved && <span className="text-sm text-green-600">Tersimpan</span>}
+          {saved && <span className="text-sm text-success">Tersimpan</span>}
         </div>
       </form>
     </section>
@@ -277,7 +277,7 @@ function AccountsSection({ accounts }: { accounts: Account[] }) {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className={`text-xs font-medium ${a.is_active ? "text-green-600" : "text-muted-foreground"}`}>
+                <span className={`text-xs font-medium ${a.is_active ? "text-success" : "text-muted-foreground"}`}>
                   {a.is_active ? "Aktif" : "Nonaktif"}
                 </span>
                 <button onClick={() => handleDelete(a.id)} className="text-xs text-destructive hover:underline">

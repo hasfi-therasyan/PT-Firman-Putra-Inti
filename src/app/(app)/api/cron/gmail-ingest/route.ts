@@ -173,7 +173,7 @@ export async function GET(_request: Request) {
         last_gmail_history_id: historyId,
         last_gmail_synced_at: new Date().toISOString(),
       } as never)
-      .eq("id", (settings as any).id)
+      .eq("id", (settings as { id: string } | null)?.id ?? "")
       .throwOnError();
 
     return NextResponse.json({

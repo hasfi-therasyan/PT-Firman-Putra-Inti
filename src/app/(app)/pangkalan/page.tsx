@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Pangkalan",
 };
 
+interface PangkalanRow {
+  id: string;
+  nama: string;
+  kode: string;
+  kecamatan?: string | null;
+  kota?: string | null;
+  status: string;
+}
+
 export default async function PangkalanPage({
   searchParams,
 }: {
@@ -16,7 +25,7 @@ export default async function PangkalanPage({
   const page = parseInt(params.page || "1", 10);
   const limit = 20;
 
-  let pangkalan: Array<any> = [];
+  let pangkalan: PangkalanRow[] = [];
   let totalCount = 0;
   let error: string | null = null;
 
@@ -94,8 +103,8 @@ export default async function PangkalanPage({
               <span
                 className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                   p.status === "aktif"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-gray-100 text-gray-700"
+                    ? "bg-success/10 text-success"
+                    : "bg-muted text-muted-foreground"
                 }`}
               >
                 {p.status === "aktif" ? "Aktif" : "Nonaktif"}

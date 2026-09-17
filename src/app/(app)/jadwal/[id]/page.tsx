@@ -14,11 +14,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
-  draft: { label: "Draft", cls: "bg-gray-100 text-gray-700" },
-  dijadwalkan: { label: "Dijadwalkan", cls: "bg-blue-100 text-blue-700" },
-  dikirim: { label: "Dikirim", cls: "bg-yellow-100 text-yellow-700" },
-  selesai: { label: "Selesai", cls: "bg-green-100 text-green-700" },
-  dibatalkan: { label: "Dibatalkan", cls: "bg-gray-100 text-gray-500" },
+  draft: { label: "Draft", cls: "bg-muted text-muted-foreground" },
+  dijadwalkan: { label: "Dijadwalkan", cls: "bg-info/10 text-info" },
+  dikirim: { label: "Dikirim", cls: "bg-warning/10 text-warning" },
+  selesai: { label: "Selesai", cls: "bg-success/10 text-success" },
+  dibatalkan: { label: "Dibatalkan", cls: "bg-muted text-muted-foreground" },
 };
 
 async function markSelesai(id: string) {
@@ -53,7 +53,7 @@ export default async function JadwalDetailPage({ params }: { params: Promise<{ i
     .maybeSingle();
 
   const pangkalan = schedule.pangkalan as any;
-  const st = STATUS_MAP[schedule.status] || { label: schedule.status, cls: "bg-gray-100" };
+  const st = STATUS_MAP[schedule.status] || { label: schedule.status, cls: "bg-muted text-muted-foreground" };
 
   return (
     <div className="space-y-6 max-w-lg mx-auto">
@@ -72,9 +72,9 @@ export default async function JadwalDetailPage({ params }: { params: Promise<{ i
         <div className="flex justify-between"><span className="text-muted-foreground">Jumlah Tabung</span><span className="font-medium">{schedule.jumlah_tabung}</span></div>
         {(schedule.tabung_3kg > 0 || schedule.tabung_5kg > 0 || schedule.tabung_12kg > 0) && (
           <div className="grid grid-cols-3 gap-2 pt-1">
-            <div className="rounded-md bg-blue-50 px-2 py-1 text-center"><p className="text-xs text-blue-600">3kg</p><p className="font-semibold text-blue-700">{schedule.tabung_3kg}</p></div>
-            <div className="rounded-md bg-amber-50 px-2 py-1 text-center"><p className="text-xs text-amber-600">5kg</p><p className="font-semibold text-amber-700">{schedule.tabung_5kg}</p></div>
-            <div className="rounded-md bg-purple-50 px-2 py-1 text-center"><p className="text-xs text-purple-600">12kg</p><p className="font-semibold text-purple-700">{schedule.tabung_12kg}</p></div>
+            <div className="rounded-md bg-info/10 px-2 py-1 text-center"><p className="text-xs text-info">3kg</p><p className="font-semibold text-info">{schedule.tabung_3kg}</p></div>
+            <div className="rounded-md bg-warning/10 px-2 py-1 text-center"><p className="text-xs text-warning">5kg</p><p className="font-semibold text-warning">{schedule.tabung_5kg}</p></div>
+            <div className="rounded-md bg-vapor/10 px-2 py-1 text-center"><p className="text-xs text-vapor">12kg</p><p className="font-semibold text-vapor">{schedule.tabung_12kg}</p></div>
           </div>
         )}
         <div className="flex justify-between"><span className="text-muted-foreground">Kendaraan</span><span className="font-medium">{schedule.nomor_kendaraan || "-"}</span></div>
@@ -89,7 +89,7 @@ export default async function JadwalDetailPage({ params }: { params: Promise<{ i
           <Link href={`/invoice/${invoice.id}`} className="block rounded-lg border bg-card p-3 hover:bg-muted/50">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium">{invoice.nomor_invoice}</p>
-              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${invoice.status === "paid" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}>
+              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${invoice.status === "paid" ? "bg-success/10 text-success" : "bg-info/10 text-info"}`}>
                 {invoice.status === "paid" ? "Lunas" : "Diterbitkan"}
               </span>
             </div>

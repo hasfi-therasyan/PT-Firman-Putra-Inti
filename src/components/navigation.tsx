@@ -49,9 +49,37 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex lg:w-60 lg:flex-col lg:border-r lg:bg-muted/30">
-      <div className="flex h-14 items-center border-b px-5 font-bold">
-        FPI-GMS
+    <aside className="hidden lg:flex lg:w-60 lg:flex-col lg:border-r lg:bg-sidebar">
+      <div className="flex h-16 items-center gap-2.5 border-b border-sidebar-border px-5">
+        <span
+          aria-hidden="true"
+          className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-[10px] shadow-sm"
+          style={{
+            background: "linear-gradient(135deg, #2f5c96 0%, #134376 55%, #0b1119 100%)",
+          }}
+        >
+          <svg width="22" height="22" viewBox="0 0 64 64" fill="none">
+            <rect x="30" y="6" width="4" height="8" rx="1" fill="#f6fbff" />
+            <rect x="19" y="13" width="26" height="38" rx="6" fill="#f6fbff" />
+            <rect x="17" y="47" width="30" height="6" rx="3" fill="#cfdfef" />
+            <path
+              d="M32 18c5.5 7.5 9 11.8 9 16.4A9 9 0 0 1 23 34.4C23 29.8 26.5 25.5 32 18Z"
+              fill="#f89125"
+            />
+            <path
+              d="M32 26.5c2.6 3.6 4.2 5.6 4.2 8A4.2 4.2 0 0 1 27.8 34.5c0-2.4 1.6-4.4 4.2-8Z"
+              fill="#fffaf0"
+            />
+          </svg>
+        </span>
+        <span className="leading-tight">
+          <span className="block text-sm font-bold tracking-[0.14em] text-sidebar-foreground">
+            FPI-GMS
+          </span>
+          <span className="block text-[10px] font-medium uppercase tracking-[0.18em] text-sidebar-foreground/60">
+            Gas Management
+          </span>
+        </span>
       </div>
       <nav className="flex-1 space-y-1 p-3">
         {navItems.map((item) => {
