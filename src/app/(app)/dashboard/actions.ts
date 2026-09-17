@@ -84,10 +84,18 @@ export async function getDashboardData(filters?: DashboardFilters) {
       .eq("status", "aktif"),
   ]);
 
-  const invoices: InvoiceRow[] = invoicesRes.data ?? [];
-  const overdue: OverdueInvoice[] = overdueRes.data ?? [];
+  // Supabase returns nested relations as arrays; normalize to single object or null
+  const normalizePangkalan = <T extends { pangkalan?: { id: string; nama: string; kode: string }[] | { nama: string }[] | null }>(rows: T[]): Omit<T, 'pangkalan'> & { pangkalan?: { id: string; nama: string; kode: string } | { nama: string } | null }[] => {
+    return rows.map(r => ({
+      ...r,
+      pangkalan: Array.isArray(r.pangkalan) ? r.pangkalan[0] ?? null : r.pangkalan ?? null
+    }));
+  };
+
+  const invoices = normalizePangkalan(invoicesRes.data ?? []) as InvoiceRow[];
+  const overdue = normalizePangkalan(overdueRes.data ?? []) as OverdueInvoice[];
   const payments: PaymentRow[] = (paymentsRes.data ?? []).filter((p) => p.arah === "masuk" && p.status_bank === "Success");
-  const schedules: ScheduleRow[] = schedulesRes.data ?? [];
+  const schedules = normalizePangkalan(schedulesRes.data ?? []) as ScheduleRow[];
   const pangkalan: PangkalanRow[] = pangkalanRes.data ?? [];
 
   const totalOutstanding = invoices
