@@ -85,7 +85,7 @@ export async function getDashboardData(filters?: DashboardFilters) {
   ]);
 
   // Supabase returns nested relations as arrays; normalize to single object or null
-  const normalizePangkalan = <T extends { pangkalan?: { id: string; nama: string; kode: string }[] | { nama: string }[] | null }>(rows: T[]): Omit<T, 'pangkalan'> & { pangkalan?: { id: string; nama: string; kode: string } | { nama: string } | null }[] => {
+  const normalizePangkalan = <T extends { pangkalan?: any }>(rows: T[]): (Omit<T, 'pangkalan'> & { pangkalan?: { id?: string; nama: string; kode?: string } | null })[] => {
     return rows.map(r => ({
       ...r,
       pangkalan: Array.isArray(r.pangkalan) ? r.pangkalan[0] ?? null : r.pangkalan ?? null
@@ -177,7 +177,7 @@ function buildScheduleStatus(schedules: ScheduleRow[]) {
   // Dijadwalkan = golden-yellow, Dikirim = magenta-pink,
   // Selesai = spring-green, Dibatalkan = abu netral.
   const colors: Record<string, string> = { dijadwalkan: "var(--chart-6)", dikirim: "var(--chart-4)", selesai: "var(--chart-5)", dibatalkan: "var(--muted-foreground)" };
-  const labels: Record<string, string> = { dijadwankan: "Dijadwalkan", dikirim: "Dikirim", selesai: "Selesai", dibatalkan: "Dibatalkan" };
+  const labels: Record<string, string> = { dijadwalkan: "Dijadwalkan", dikirim: "Dikirim", selesai: "Selesai", dibatalkan: "Dibatalkan" };
   const counts: Record<string, number> = {};
   schedules.forEach((s) => { counts[s.status] = (counts[s.status] || 0) + 1; });
   return Object.entries(counts).map(([k, v]) => ({ name: labels[k] || k, value: v, color: colors[k] || "var(--muted-foreground)" }));
