@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/gmail-ingest",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 0 * * *"
     },
     {
       "path": "/api/cron/overdue-check",
@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/cron/reconcile",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
