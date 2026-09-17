@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { SplashScreen } from "@/components/splash-screen";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -58,7 +59,7 @@ export default function RootLayout({
     <html lang="id" className={`${jakarta.variable} h-full antialiased`}>
       <body className="min-h-dvh bg-background text-foreground font-sans">
         <SplashScreen />
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
