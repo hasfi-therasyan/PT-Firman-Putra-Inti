@@ -21,7 +21,7 @@ function KPICard({ label, value, sub, icon, accent }: { label: string; value: st
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
-          <p className="text-lg sm:text-xl lg:text-2xl font-bold tabular-nums">{value}</p>
+          <p className="text-lg sm:text-xl lg:text-2xl font-bold tabular-nums whitespace-nowrap">{value}</p>
           {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
         </div>
         <span className="text-2xl opacity-60">{icon}</span>
