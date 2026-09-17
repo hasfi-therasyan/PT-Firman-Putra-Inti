@@ -4,18 +4,23 @@ import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import LoadingOverlay from './LoadingOverlay';
 
-export default function RouteLoader({ children }: { children: React.ReactNode }) {
+interface Props {
+  children: React.ReactNode;
+  externalLoading?: boolean;
+}
+
+export default function RouteLoader({ children, externalLoading = false }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(false);
+  const [internalLoading, setInternalLoading] = useState(false);
 
   useEffect(() => {
-    // Show loader on route change
-    setLoading(true);
-    // Hide after minimal delay to avoid flicker on fast navigations
-    const timer = setTimeout(() => setLoading(false), 150);
+    setInternalLoading(true);
+    const timer = setTimeout(() => setInternalLoading(false), 150);
     return () => clearTimeout(timer);
   }, [pathname, searchParams]);
 
-  return <LoadingOverlay isLoading={loading}>{children}</LoadingOverlay>;
+  const showOverlay = internalLoading || externalLoading;
+
+  return <LoadingOverlay isLoading={showOverlay}>{children}</LoadingOverlay>;
 }
