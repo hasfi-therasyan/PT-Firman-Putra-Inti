@@ -1,0 +1,153 @@
+
+import { createClient } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { generateInvoiceNumber, generateKodeUnik, calculateTotal } from '@/lib/domain/invoice';
+import { deriveStatus } from '@/lib/domain/status-machine';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      pangkalan_id,
+      delivery_schedule_id,
+      tanggal_invoice,
+      tanggal_jatuh_tempo,
+      items,
+      penyesuaian = 0,
+      catatan,
+    } = body;
+
+    if (!pangkalan_id || !tanggal_invoice || !tanggal_jatuh_tempo || !items || items.length === 0) {
+      return NextResponse.json({ error: 'Data tidak lengkap' }, { status: 400 });
+    }
+
+    // Validate items
+    for (const item of items) {
+      if (!item.deskripsi || !item.qty || item.qty <= 0 || !item.unit_price || item.unit_price <= 0) {
+        return NextResponse.json({ error: 'Item invoice tidak valid' }, { status: 400 });
+      }
+    }
+
+    const admin = createAdminClient();
+    const admin = supabaseAdmin;
+
+    // Get pangkalan for harga_per_tabung (validation)
+    const { data: pangkalan, error: pangkalanError } = await admin
+      .from('pangkalan')
+      .select('id, nama, harga_per_tabung')
+      .eq('id', pangkalan_id)
+      .single();
+
+    if (pangkalanError || !pangkalan) {
+      return NextResponse.json({ error: 'Pangkalan tidak ditemukan' }, { status: 404 });
+    }
+
+    // Get app_settings for invoice format and kode_unik setting
+    const { data: settings } = await admin
+      .from('app_settings')
+      .select('*')
+      .single();
+
+    // Calculate subtotal from items
+    const subtotal = items.reduce((sum: number, item: any) => sum + item.qty * item.unit_price, 0);
+
+    // Generate kode_unik if enabled
+    const useKodeUnik = settings?.kode_unik_enabled ?? true;
+    let kode_unik = 0;
+    if (useKodeUnik) {
+      kode_unik = await generateKodeUnik(admin);
+    }
+
+    // Calculate total
+    const total = calculateTotal(subtotal, penyesuaian, kode_unik);
+
+    // Generate invoice number
+    const nomor_invoice = await generateInvoiceNumber(admin, settings?.invoice_format);
+
+    // Determine initial status
+    const status = deriveStatus({
+      total,
+      total_dibayar: 0,
+      tanggal_jatuh_tempo: new Date(tanggal_jatuh_tempo),
+      status: 'draft',
+    });
+
+    // Insert invoice
+    const { data: invoice, error: invoiceError } = await admin
+      .from('invoices')
+      .insert({
+        nomor_invoice,
+        pangkalan_id,
+        delivery_schedule_id: delivery_schedule_id || null,
+        tanggal_invoice,
+        tanggal_jatuh_tempo,
+        subtotal,
+        penyesuaian,
+        kode_unik,
+        total,
+        total_dibayar: 0,
+        status,
+        catatan: catatan || null,
+        created_by: user.id,
+      })
+      .select('id')
+      .single();
+
+    if (invoiceError || !invoice) {
+      return NextResponse.json({ error: invoiceError?.message || 'Gagal membuat invoice' }, { status: 500 });
+    }
+
+    // Insert invoice items
+    const invoiceItems = items.map((item: any) => ({
+      invoice_id: invoice.id,
+      deskripsi: item.deskripsi,
+      qty: item.qty,
+      unit_price: item.unit_price,
+      line_total: item.qty * item.unit_price,
+    }));
+
+    const { error: itemsError } = await admin.from('invoice_items').insert(invoiceItems);
+
+    if (itemsError) {
+      // Rollback invoice
+      await admin.from('invoices').delete().eq('id', invoice.id);
+      return NextResponse.json({ error: itemsError.message }, { status: 500 });
+    }
+
+    // If linked to delivery schedule, update schedule status
+    if (delivery_schedule_id) {
+      await admin
+        .from('delivery_schedules')
+        .update({ status: 'selesai' })
+        .eq('id', delivery_schedule_id);
+    }
+
+    // Audit log
+    await admin.from('audit_logs').insert({
+      table_name: 'invoices',
+      record_id: invoice.id,
+      action: 'insert',
+      new_values: {
+        nomor_invoice,
+        pangkalan_id,
+        total,
+        status,
+      },
+      actor: user.id,
+      reason: 'Invoice dibuat manual',
+    });
+
+    return NextResponse.json({ invoiceId: invoice.id, nomor_invoice });
+  } catch (error: any) {
+    console.error('Create invoice error:', error);
+    return NextResponse.json({ error: 'Terjadi kesalahan server' }, { status: 500 });
+  }
+}
